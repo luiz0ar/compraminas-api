@@ -7,19 +7,19 @@ export default class extends BaseSeeder {
     await ContactForm.createMany([
       {
         key: 'contact_form_recipient',
-        value: 'email-que-recebe@exemplo.com'
+        value: 'ti@minasul.com.br'
       },
        {
         key: 'smtp_from_email',
-        value: 'email-que-envia@exemplo.com.br'
+        value: 'faleconosco@cooperativaminasul.com.br'
       },
       {
         key: 'recaptcha_site_key',
-        value: 'CHAVE_DE_SITE'
+        value: '6LesyX4rAAAAAA9J0AzxCYvIdST7GxPxg1_PGgbY'
       },
       {
         key: 'recaptcha_secret_key',
-        value: 'CHAVE_SECRETA'
+        value: '6LesyX4rAAAAAEyEZCKpz1CQUWJyEPXQ0YsnTH_E'
       },
     ])
   }
