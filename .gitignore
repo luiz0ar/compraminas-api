@@ -11,7 +11,7 @@ tmp
 
 # Frontend assets compiled code
 public/assets
-public/database/seeders/contact_form_seeder.ts
+database/seeders/contact_form_seeder.ts
 
 # Build tools specific
 npm-debug.log
