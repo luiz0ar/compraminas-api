@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Novo Contato do Site</title>
+</head>
+<body>
+  <h2>Nova mensagem recebida do formulário de contato</h2>
+  <hr>
+  <p><strong>Nome:</strong> {{ name }}</p>
+  <p><strong>E-mail:</strong> {{ email }}</p>
+  @if(phone)
+    <p><strong>Telefone:</strong> {{ phone }}</p>
+  @endif
+  <hr>
+  <h3>Mensagem:</h3>
+  <p>
+    {{ content }}
+  </p>
+</body>
+</html>
