@@ -1,42 +1,39 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import AboutPage from '#models/about_page'
+import vine from '@vinejs/vine'
 
 export default class AboutPagesController {
-   async show({ response }: HttpContext) {
-    const record = await AboutPage.first()
-    if (!record) {
-      return response.ok({
-        paragraphs: [],
-        informations: '',
-      })
-    }
-    let paragraphs: string[] = []
-    try {
-      paragraphs = JSON.parse(record.content)
-    } catch (error) {
-      console.error('Erro ao fazer parse do conteúdo da página Sobre:', error)
-    }
-    return response.ok({
-      paragraphs: paragraphs,
-      informations: record.informations,
-    })
+
+  // Apenas busca o registro e o retorna como está
+  async show({ response }: HttpContext) {
+    const record = await AboutPage.firstOrCreate({}, {})
+    return response.ok(record)
   }
 
-    async update({ request, response }: HttpContext) {
-    const { paragraphs, informations } = request.only(['paragraphs', 'informations'])
-    if (!Array.isArray(paragraphs)) {
-      return response.badRequest({ error: 'Parágrafos devem estar em formato de array.' })
-    }
-    const content = JSON.stringify(paragraphs)
-    const record = await AboutPage.first()
-    if (record) {
-      record.merge({ content, informations })
-      await record.save()
-    } else {
-      await AboutPage.create({ content, informations })
-    }
-    return response.ok({
-      message: 'Informações atualizadas com sucesso',
+  // Recebe e salva o 'content' como um texto simples
+  async update({ request, response }: HttpContext) {
+    const schema = vine.object({
+      content: vine.string().nullable(),
+      informations: vine.string().nullable(),
     })
+
+    try {
+      const payload = await vine.validate({ schema, data: request.all() })
+      const record = await AboutPage.firstOrFail()
+
+      // Converte 'null' em uma string vazia para ser compatível com o Model
+      const contentToSave = payload.content ?? ''
+      const informationsToSave = payload.informations ?? ''
+
+      record.merge({
+        content: contentToSave,
+        informations: informationsToSave,
+      })
+      await record.save()
+
+      return response.ok({ message: 'Página Sobre atualizada com sucesso!' })
+    } catch (error) {
+      return response.badRequest({ message: 'Erro ao salvar os dados.', errors: error.messages })
+    }
   }
 }
