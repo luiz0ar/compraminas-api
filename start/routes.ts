@@ -11,9 +11,8 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 import app from '@adonisjs/core/services/app'
 
-// --- ROTAS PÚBLICAS (Leitura e Login) ---
 router.post('/login', '#controllers/users_controller.login')
-router.resource('users', () => import('#controllers/users_controller')) // Assumindo que este resource tem suas próprias proteções se necessário
+router.resource('users', () => import('#controllers/users_controller'))
 
 // Rotas GET para buscar conteúdo publicamente
 router.get('/footer', '#controllers/footers_controller.index')
