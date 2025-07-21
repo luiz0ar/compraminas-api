@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name')
       table.text('unity_url')
+      table.boolean('visible').defaultTo(true)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

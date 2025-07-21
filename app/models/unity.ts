@@ -11,6 +11,9 @@ export default class Unity extends BaseModel {
   @column()
   declare unityUrl: string | null
 
+  @column()
+  declare visible: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

@@ -3,21 +3,28 @@ import Unity from '#models/unity'
 import vine from '@vinejs/vine'
 
 export default class UnitiesController {
-
   async index({ response }: HttpContext) {
+    const unities = await Unity.query().where('visible', true).orderBy('name', 'asc')
+    return response.ok(unities)
+  }
+
+  async indexAdmin({ response }: HttpContext) {
     const unities = await Unity.query().orderBy('name', 'asc')
     return response.ok(unities)
   }
 
-   async show({ params, response }: HttpContext) {
-      const unity = await Unity.findOrFail(params.id)
-      return response.ok(unity)
-    }
+  async toggleVisibility({ params, response }: HttpContext) {
+    const unity = await Unity.findOrFail(params.id)
+    unity.visible = !unity.visible
+    await unity.save()
+    return response.ok(unity)
+  }
 
   async store({ request, response }: HttpContext) {
     const schema = vine.object({
       name: vine.string(),
       unityUrl: vine.string().url().nullable(),
+      visible: vine.boolean().optional(),
     })
     const payload = await vine.validate({ schema, data: request.all() })
     const unity = await Unity.create(payload)
@@ -29,6 +36,7 @@ export default class UnitiesController {
     const schema = vine.object({
       name: vine.string(),
       unityUrl: vine.string().url().nullable(),
+      visible: vine.boolean().optional(),
     })
     const payload = await vine.validate({ schema, data: request.all() })
     unity.merge(payload)

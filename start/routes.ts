@@ -27,7 +27,7 @@ router.get('/contact-settings', '#controllers/contact_settings_controller.index'
 router.get('/unities', '#controllers/unities_controller.index')
 
 
-// --- ROTAS PROTEGIDAS (Escrita, Edição, Deleção) ---
+// --- ROTAS PROTEGIDAS ---
 router.group(() => {
   // Rotas PUT para atualização de conteúdo
   router.put('/start', '#controllers/starts_controller.update')
@@ -37,6 +37,10 @@ router.group(() => {
   router.put('/press-content', '#controllers/press_articles_controller.update')
   router.put('/contact', '#controllers/contacts_controller.update')
   router.put('/contact-settings', '#controllers/contact_settings_controller.update')
+  router.patch('/unities/:id/toggle', '#controllers/unities_controller.toggleVisibility')
+
+  // Rota get para unidades no administrativo
+   router.get('/unities/admin', '#controllers/unities_controller.indexAdmin')
 
   // Rota do formulário de contato
   router.post('/send-contact-email', '#controllers/contact_forms_controller.send')
@@ -46,11 +50,11 @@ router.group(() => {
   // ROTA DE UPLOAD ADICIONADA E CORRIGIDA
   router.post('/exhibitors/upload', '#controllers/exhibitors_controller.upload')
 
-  // --- GERENCIAMENTO DE RECURSOS (CRUD) ---
-  router.resource('exhibitors', '#controllers/exhibitors_controller').except(['index']) // .index() é público
-  router.resource('unities', '#controllers/unities_controller').except(['index'])      // .index() é público
+  // --- GERENCIAMENTO DE RECURSOS ---
+  router.resource('exhibitors', '#controllers/exhibitors_controller').except(['index'])
+  router.resource('unities', '#controllers/unities_controller').except(['index'])
 
-}).use(middleware.auth()) // Aplica o middleware de autenticação a todo o grupo
+}).use(middleware.auth())
 
 
 // --- ROTA PARA SERVIR ARQUIVOS ---

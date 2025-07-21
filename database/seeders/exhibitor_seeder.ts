@@ -8,7 +8,7 @@ export default class extends BaseSeeder {
       {
         name: 'Mahindra Tratores',
         logoUrl: '/uploads/exhibitors/MahindraRise.png',
-        websiteUrl: 'http://mahindratratores.com.br',
+        websiteUrl: 'https://www.mahindrabrasil.com.br',
         contact: '(35) 3229-3030',
       },
       {
