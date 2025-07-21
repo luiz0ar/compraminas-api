@@ -6,7 +6,7 @@ export default class AboutSection extends BaseModel {
   declare id: number
 
   @column()
-  declare content: string
+  declare content: string | null
 
   @column({ columnName: 'button_primary_text' })
   declare buttonPrimaryText: string
