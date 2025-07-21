@@ -47,8 +47,8 @@ router.group(() => {
 
   // --- ROTAS DE UPLOAD ---
   router.post('/press-content/upload', '#controllers/press_articles_controller.uploadImage')
-  // ROTA DE UPLOAD ADICIONADA E CORRIGIDA
   router.post('/exhibitors/upload', '#controllers/exhibitors_controller.upload')
+  router.post('/about-page/upload', '#controllers/about_pages_controller.uploadImage')
 
   // --- GERENCIAMENTO DE RECURSOS ---
   router.resource('exhibitors', '#controllers/exhibitors_controller').except(['index'])

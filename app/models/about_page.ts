@@ -6,10 +6,13 @@ export default class AboutPage extends BaseModel {
   declare id: number
 
   @column()
-  declare content: string
+  declare content: string | null
 
   @column()
   declare informations: string | null
+
+  @column()
+  declare image: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

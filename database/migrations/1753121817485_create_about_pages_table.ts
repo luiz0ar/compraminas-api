@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.text('content').notNullable()
       table.text('informations').notNullable()
+      table.string('image').nullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
