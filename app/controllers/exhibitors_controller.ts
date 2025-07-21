@@ -5,7 +5,12 @@ import app from '@adonisjs/core/services/app'
 import fs from 'node:fs/promises'
 
 export default class ExhibitorsController {
-  async index({ response }: HttpContext) {
+   async index({ response }: HttpContext) {
+    const exhibitors = await Exhibitor.query().where('visible', true).orderBy('name', 'asc')
+    return response.ok(exhibitors)
+  }
+
+    async indexAdmin({ response }: HttpContext) {
     const exhibitors = await Exhibitor.query().orderBy('name', 'asc')
     return response.ok(exhibitors)
   }
@@ -33,20 +38,24 @@ export default class ExhibitorsController {
     }
   }
 
+    async toggleVisibility({ params, response }: HttpContext) {
+    const exhibitor = await Exhibitor.findOrFail(params.id)
+    exhibitor.visible = !exhibitor.visible
+    await exhibitor.save()
+    return response.ok(exhibitor)
+  }
+
   async store({ request, response }: HttpContext) {
     const schema = vine.object({
       name: vine.string().trim(),
       contact: vine.string().optional(),
       websiteUrl: vine.string().url().optional(),
       logoUrl: vine.string().optional(),
+      visible: vine.boolean().optional(),
     })
-    try {
-      const payload = await vine.validate({ schema, data: request.all() })
-      const exhibitor = await Exhibitor.create(payload)
-      return response.created(exhibitor)
-    } catch (error) {
-      return response.badRequest({ errors: error.messages })
-    }
+    const payload = await vine.validate({ schema, data: request.all() })
+    const exhibitor = await Exhibitor.create(payload)
+    return response.created(exhibitor)
   }
 
   async update({ params, request, response }: HttpContext) {
@@ -56,19 +65,12 @@ export default class ExhibitorsController {
       contact: vine.string().optional(),
       websiteUrl: vine.string().url().optional(),
       logoUrl: vine.string().optional(),
+      visible: vine.boolean().optional(),
     })
-
-    try {
-      const payload = await vine.validate({ schema, data: request.all() })
-      if (payload.logoUrl && exhibitor.logoUrl && payload.logoUrl !== exhibitor.logoUrl) {
-         await fs.unlink(app.makePath(exhibitor.logoUrl.substring(1))).catch(() => {})
-      }
-      exhibitor.merge(payload)
-      await exhibitor.save()
-      return response.ok(exhibitor)
-    } catch (error) {
-      return response.badRequest({ errors: error.messages })
-    }
+    const payload = await vine.validate({ schema, data: request.all() })
+    exhibitor.merge(payload)
+    await exhibitor.save()
+    return response.ok(exhibitor)
   }
 
   async destroy({ params, response }: HttpContext) {

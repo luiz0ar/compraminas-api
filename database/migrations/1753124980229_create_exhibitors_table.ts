@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.string('logo_url').nullable()
       table.string('website_url').nullable()
       table.string('contact').notNullable()
+      table.boolean('visible').defaultTo(true)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

@@ -17,6 +17,9 @@ export default class Exhibitor extends BaseModel {
   @column()
   declare contact: string
 
+    @column()
+  declare visible: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

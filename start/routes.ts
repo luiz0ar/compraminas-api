@@ -38,9 +38,11 @@ router.group(() => {
   router.put('/contact', '#controllers/contacts_controller.update')
   router.put('/contact-settings', '#controllers/contact_settings_controller.update')
   router.patch('/unities/:id/toggle', '#controllers/unities_controller.toggleVisibility')
+  router.patch('/exhibitors/:id/toggle', '#controllers/exhibitors_controller.toggleVisibility')
 
-  // Rota get para unidades no administrativo
+  // Rota get para exibição no administrativo
    router.get('/unities/admin', '#controllers/unities_controller.indexAdmin')
+   router.get('/exhibitors/admin', '#controllers/exhibitors_controller.indexAdmin')
 
   // Rota do formulário de contato
   router.post('/send-contact-email', '#controllers/contact_forms_controller.send')
