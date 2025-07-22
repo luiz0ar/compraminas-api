@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.text('first_message').notNullable()
       table.string('link_button').notNullable()
       table.string('text_button').notNullable()
+      table.string('banner').notNullable()
       table.timestamp('created_at', { useTz: true }).defaultTo(this.now())
       table.timestamp('updated_at', { useTz: true }).defaultTo(this.now())
     })

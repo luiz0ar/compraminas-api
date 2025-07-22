@@ -8,6 +8,7 @@ export default class StartSeeder extends BaseSeeder {
       firstMessage: 'De 12 a 14 de Março, das 7h às 18h, no Complexo Operacional Minasul!',
       linkButton: 'https://www.instagram.com/minasulcooperativa/',
       textButton: 'CLIQUE AQUI E ACOMPANHE AS NOVIDADES',
+      banner: '/uploads/banner/1280x720.png'
     })
   }
 }

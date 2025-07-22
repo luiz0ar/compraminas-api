@@ -6,13 +6,16 @@ export default class Start extends BaseModel {
   declare id: number
 
   @column({ columnName: 'first_message' })
-  declare firstMessage: string
+  declare firstMessage: string | null
 
   @column({ columnName: 'link_button' })
-  declare linkButton: string
+  declare linkButton: string | null
 
   @column({ columnName: 'text_button' })
-  declare textButton: string
+  declare textButton: string | null
+
+  @column()
+  declare banner: string | null
 
   @column.dateTime({ columnName: 'created_at', autoCreate: true })
   declare createdAt: DateTime
