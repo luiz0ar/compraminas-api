@@ -3,20 +3,33 @@ import Exhibitor from '#models/exhibitor'
 import vine from '@vinejs/vine'
 import app from '@adonisjs/core/services/app'
 import fs from 'node:fs/promises'
+import CacheService from '#services/cache'
 
 export default class ExhibitorsController {
    async index({ response }: HttpContext) {
-    const exhibitors = await Exhibitor.query().where('visible', true).orderBy('name', 'asc')
+    const exhibitors = await CacheService.getOrSet(
+      'exhibitors',
+      60,
+      () => Exhibitor.query().where('visible', true).orderBy('name', 'asc')
+    )
     return response.ok(exhibitors)
   }
 
     async indexAdmin({ response }: HttpContext) {
-    const exhibitors = await Exhibitor.query().orderBy('name', 'asc')
+    const exhibitors = await CacheService.getOrSet(
+      'exhibitors_admin',
+      60,
+      () => Exhibitor.query().orderBy('name', 'asc')
+    )
     return response.ok(exhibitors)
   }
 
   async show({ params, response }: HttpContext) {
-    const exhibitor = await Exhibitor.findOrFail(params.id)
+    const exhibitor = await CacheService.getOrSet(
+      `exhibitor_${params.id}`,
+      60,
+      () => Exhibitor.findOrFail(params.id)
+    )
     return response.ok(exhibitor)
   }
 

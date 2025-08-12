@@ -1,11 +1,16 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import AboutSection from '#models/about_section'
 import vine from '@vinejs/vine'
+import CacheService from '#services/cache'
 
 export default class AboutSectionsController {
 
   async show({ response }: HttpContext) {
-    const record = await AboutSection.firstOrCreate({}, {})
+    const record = await CacheService.getOrSet(
+      'about_section',
+      60,
+      () => AboutSection.firstOrCreate({}, {})
+    )
     return response.ok(record)
   }
 

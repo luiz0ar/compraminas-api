@@ -3,11 +3,16 @@ import PressArticle from '#models/press_article'
 import vine from '@vinejs/vine'
 import app from '@adonisjs/core/services/app'
 import fs from 'node:fs/promises'
+import CacheService from '#services/cache'
 
 export default class PressContentsController {
 
   async show({ response }: HttpContext) {
-    const article = await PressArticle.firstOrCreate({}, {})
+    const article = await CacheService.getOrSet(
+      'press_article',
+      60,
+      () => PressArticle.firstOrCreate({}, {})
+    )
     return response.ok(article)
   }
 

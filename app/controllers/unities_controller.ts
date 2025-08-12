@@ -1,15 +1,24 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Unity from '#models/unity'
 import vine from '@vinejs/vine'
+import CacheService from '#services/cache'
 
 export default class UnitiesController {
   async index({ response }: HttpContext) {
-    const unities = await Unity.query().where('visible', true).orderBy('name', 'asc')
+    const unities = await CacheService.getOrSet(
+      'unities',
+      60,
+      () => Unity.query().where('visible', true).orderBy('name', 'asc')
+    )
     return response.ok(unities)
   }
 
   async indexAdmin({ response }: HttpContext) {
-    const unities = await Unity.query().orderBy('name', 'asc')
+    const unities = await CacheService.getOrSet(
+      'unities_admin',
+      60,
+      () => Unity.query().orderBy('name', 'asc')
+    )
     return response.ok(unities)
   }
 

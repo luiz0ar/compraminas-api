@@ -1,10 +1,15 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Footer from '#models/footer'
 import vine from '@vinejs/vine'
+import CacheService from '#services/cache'
 
 export default class FootersController {
   async index({ response }: HttpContext) {
-    const settings = await Footer.all()
+    const settings = await CacheService.getOrSet(
+      'footer_settings',
+      60,
+      () => Footer.all()
+    )
     const formattedSettings = settings.reduce((acc, setting) => {
       acc[setting.key] = setting.value
       return acc

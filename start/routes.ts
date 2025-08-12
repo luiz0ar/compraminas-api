@@ -10,6 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 import app from '@adonisjs/core/services/app'
+import Redis from '@adonisjs/redis/services/main'
 
 router.post('/login', '#controllers/users_controller.login')
 router.resource('users', () => import('#controllers/users_controller'))
@@ -64,4 +65,10 @@ router.group(() => {
 router.get('/uploads/*', ({ response, request }) => {
   const filePath = request.param('*').join('/')
   return response.download(app.makePath('uploads', filePath))
+})
+
+// --- ROTA TESTE ---
+router.get('/redis-test', async () => {
+  await Redis.set('teste', 'funcionou', 'EX', 5)
+  return await Redis.get('teste')
 })

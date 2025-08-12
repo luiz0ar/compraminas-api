@@ -3,11 +3,16 @@ import AboutPage from '#models/about_page'
 import vine from '@vinejs/vine'
 import app from '@adonisjs/core/services/app'
 import fs from 'node:fs/promises'
+import CacheService from '#services/cache'
 
 export default class AboutPagesController {
 
   async show({ response }: HttpContext) {
-    const record = await AboutPage.firstOrCreate({}, {})
+    const record = await CacheService.getOrSet(
+      'about_page',
+      60,
+      () => AboutPage.firstOrCreate({}, {})
+    )
     return response.ok(record)
   }
 

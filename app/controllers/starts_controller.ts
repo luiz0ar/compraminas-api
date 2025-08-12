@@ -3,11 +3,16 @@ import Start from '#models/start'
 import vine from '@vinejs/vine'
 import app from '@adonisjs/core/services/app'
 import fs from 'node:fs/promises'
+import CacheService from '#services/cache'
 
 export default class StartsController {
 
-  async show({ response }: HttpContext) {
-    const record = await Start.firstOrCreate({}, {})
+   async show({ response }: HttpContext) {
+    const record = await CacheService.getOrSet(
+      'start_record',
+      60,
+      () => Start.firstOrCreate({}, {})
+    )
     return response.ok(record)
   }
 
@@ -21,8 +26,8 @@ export default class StartsController {
       if (startContent?.banner) {
         await fs.unlink(app.makePath(startContent.banner.substring(1))).catch(() => {})
       }
-      await payload.banner.move(app.makePath('uploads/start'))
-      const bannerUrl = `/uploads/start/${payload.banner.fileName}`
+      await payload.banner.move(app.makePath('uploads/banner'))
+      const bannerUrl = `/uploads/banner/${payload.banner.fileName}`
       return response.ok({ bannerUrl })
     } catch (error) {
       return response.badRequest({ message: 'Erro no upload do arquivo.', errors: error.messages })

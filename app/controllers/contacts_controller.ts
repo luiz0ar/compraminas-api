@@ -1,10 +1,15 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Contact from '#models/contact'
 import vine from '@vinejs/vine'
+import CacheService from '#services/cache'
 
 export default class ContactsController {
   async show({ response }: HttpContext) {
-    const contactInfo = await Contact.firstOrCreate({}, {})
+    const contactInfo = await CacheService.getOrSet(
+      'contact_info',
+      60,
+      () => Contact.firstOrCreate({}, {})
+    )
     return response.ok(contactInfo)
   }
 
